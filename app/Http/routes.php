@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return 'welcome';
-});
+Route::get('/', 'ArticlesController@index');
+
+Route::get('article/{id}', 'ArticlesController@show');
 
 Route::get('about', 'PagesController@about');
