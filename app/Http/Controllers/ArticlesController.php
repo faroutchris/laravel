@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use Request;
 use App\Http\Requests;
 use Carbon\Carbon;
+use App\Http\Requests\ArticleRequest;
 
 class ArticlesController extends Controller
 {
-    
     /**
      * Show all articles, sorted by published_at 
      * 
@@ -53,11 +52,41 @@ class ArticlesController extends Controller
     /**
      * Show all articles, sorted by published_at 
      * 
+     * @param ArticleRequest $request (validates request params before triggering function body)
      * @return Response
      */
-    public function store () 
+    public function store (ArticleRequest $request) 
     {
-        Article::create( Request::all() );
+        Article::create( $request->all() );
+        
+        return redirect('/articles');
+    }
+    
+    /**
+     * Show page to edit article 
+     * 
+     * @param integer $id
+     * @return Response
+     */
+    public function edit ($id) 
+    {
+        $article = Article::findOrFail($id);
+        
+        return view('articles.edit')->with('article', $article);
+    }
+    
+    /**
+     * Update article by id 
+     * 
+     * @param integer $id
+     * @param ArticleRequest $request (validates request params before triggering function body)
+     * @return Response
+     */
+    public function update ($id, ArticleRequest $request) 
+    {
+        $article = Article::findOrFail($id);
+        
+        $article->update( $request->all() );
         
         return redirect('/articles');
     }
